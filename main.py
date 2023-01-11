@@ -4,6 +4,10 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 import time  # Needed for Bot to pause
 
+print("*****************************************************************\n"
+"* Welcome to Easy Apply Job Application Automation on LinkedIn! *\n"
+"*****************************************************************\n")
+
 ACCOUNT_EMAIL = "RANDOMEMAIL@RANDOM.com"  # Insert User email ""
 ACCOUNT_PASSWORD = "SecurePassword"  # Insert User Password ""
 PHONE = "0412456789"  # Insert User Phone Number ""
