@@ -4,9 +4,9 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 import time  # Needed for Bot to pause
 
-ACCOUNT_EMAIL = "RANDOMEMAIL@RANDOM.com"  # Insert User email ""
-ACCOUNT_PASSWORD = "SecurePassword"  # Insert User Password ""
-PHONE = "0412456789"  # Insert User Phone Number ""
+ACCOUNT_EMAIL = input("Enter Email : ")  # Insert User email ""
+ACCOUNT_PASSWORD = input("Enter Password : ")  # Insert User Password ""
+PHONE = input("Enter Phone Number : ")  # Insert User Phone Number ""
 
 chrome_driver_path = "Users\jayco\OneDrive\Documents\ChromeDriver"  # Insert your path for chrome driver ""
 driver = webdriver.Chrome(chrome_driver_path)
