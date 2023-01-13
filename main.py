@@ -8,7 +8,7 @@ ACCOUNT_EMAIL = input("Enter Email : ")  # Insert User email ""
 ACCOUNT_PASSWORD = input("Enter Password : ")  # Insert User Password ""
 PHONE = input("Enter Phone Number : ")  # Insert User Phone Number ""
 
-chrome_driver_path = "Users\jayco\OneDrive\Documents\ChromeDriver"  # Insert your path for chrome driver ""
+chrome_driver_path = input("Please enter path to Chrome web driver : ")  # Insert your path for chrome driver ""
 driver = webdriver.Chrome(chrome_driver_path)
 driver.get(
     "https://www.linkedin.com/jobs/search/?currentJobId=3318747866&geoId=107042567&keywords=cloud%20support"
