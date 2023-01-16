@@ -9,7 +9,7 @@ ACCOUNT_PASSWORD = input("Enter Password : ")  # Insert User Password ""
 PHONE = input("Enter Phone Number : ")  # Insert User Phone Number ""
 
 chrome_driver_path = input("Please enter path to Chrome web driver : ")  # Insert your path for chrome driver ""
-driver = webdriver.Chrome(chrome_driver_path)
+driver = webdriver.Chrome(executable_path=chrome_driver_path)
 driver.get(
     "https://www.linkedin.com/jobs/search/?currentJobId=3318747866&geoId=107042567&keywords=cloud%20support"
     "%20engineer&location=Adelaide%2C%20South%20Australia%2C%20Australia&refresh=true")   # Insert Hyperlink For
