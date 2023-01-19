@@ -10,7 +10,7 @@ import re
 import json
 
 
-class EasyApplyLinkedin:
+class EasyApplyLinkedIn:
 
     def __init__(self, data):
         # Parameter initialization of Program includes User Email, Password, Keywords, Location and Service for
@@ -22,7 +22,7 @@ class EasyApplyLinkedin:
         self.location = data['location']
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-    def login_linkedin(self):
+    def login_to_linkedin(self):
         # Function To automatically log in LinkedIn
 
         # Go to the LinkedIn login url
@@ -37,7 +37,7 @@ class EasyApplyLinkedin:
         login_pass.send_keys(self.password)
         login_pass.send_keys(Keys.RETURN)
 
-    def job_search(self):
+    def search_for_jobs(self):
         # Function to go to the job page on LinkedIn and filter Jobs by specified Keywords and Location
 
         # Go to Jobs
@@ -58,7 +58,7 @@ class EasyApplyLinkedin:
         time.sleep(2)
         search_location.send_keys(Keys.RETURN)
 
-    def filter(self):
+    def filter_jobs(self):
         # Filter all Jobs by the Easy Apply button
 
         # Select all filters, click on Easy Apply and apply the filter
@@ -78,7 +78,7 @@ class EasyApplyLinkedin:
     def find_offers(self):
         # Function finds all the offers through all the pages result of the search and filter
 
-        # find the total amount of results (if the results are above 24-more than one page-, we will scroll trhough
+        # find the total amount of results (if the results are above 24-more than one page-, scroll through
         # all available pages)
         total_results = self.driver.find_element(By.CLASS_NAME, "display-flex.t-12.t-black--light.t-normal")
         total_results_int = int(total_results.text.split(' ', 1)[0].replace(",", ""))
@@ -98,7 +98,7 @@ class EasyApplyLinkedin:
             titles = result.find_elements(By.CLASS_NAME,
                                           'job-card-search__title.artdeco-entity-lockup__title.ember-view')
             for title in titles:
-                self.submit_apply(title)
+                self.submit_application(title)
 
         # If there is more than one page, find the pages and apply to the results of each page
         if total_results_int > 24:
@@ -130,23 +130,23 @@ class EasyApplyLinkedin:
                                                           'job-card-search__title.artdeco-entity-lockup__title.ember'
                                                           '-view')
                     for title_ext in titles_ext:
-                        self.submit_apply(title_ext)
+                        self.submit_application(title_ext)
         else:
             self.close_session()
 
-    def submit_apply(self, job_add):
+    def submit_application(self, job_add):
         # Function submits the application
 
         print('You are applying to the position of: ', job_add.text)
         job_add.click()
         time.sleep(2)
 
-        # Click on the easy apply button, skip if already applied for the add
+        # Click on the easy apply button, skip if already applied for the job
         try:
             in_apply = self.driver.find_element(By.XPATH, "//button[@data-control-name='jobdetails_topcard_inapply']")
             in_apply.click()
         except NoSuchElementException:
-            print('You already applied to this job, go to next...')
+            print('You have already applied for this job, go to next...')
             pass
         time.sleep(1)
 
@@ -157,7 +157,7 @@ class EasyApplyLinkedin:
 
         # ... if not available, discard application and go to next
         except NoSuchElementException:
-            print('Not direct application, going to next...')
+            print('Complex Application, skipping to the next...')
             try:
                 discard = self.driver.find_element(By.XPATH, "//button[@data-test-modal-close-btn]")
                 discard.send_keys(Keys.RETURN)
@@ -173,18 +173,18 @@ class EasyApplyLinkedin:
     def close_session(self):
         # Function to close current session
 
-        print('End of the session, see you later!')
+        print('End of the session, see you next time!')
         self.driver.close()
 
     def apply(self):
         # Apply to Jobs
 
         self.driver.maximize_window()
-        self.login_linkedin()
+        self.login_to_linkedin()
         time.sleep(5)
-        self.job_search()
+        self.search_for_jobs()
         time.sleep(5)
-        self.filter()
+        self.filter_jobs()
         time.sleep(2)
         self.find_offers()
         time.sleep(2)
@@ -195,5 +195,5 @@ if __name__ == '__main__':
     with open('config.json') as config_file:
         data = json.load(config_file)
 
-    bot = EasyApplyLinkedin(data)
+    bot = EasyApplyLinkedIn(data)
     bot.apply()
