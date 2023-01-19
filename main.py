@@ -38,7 +38,7 @@ class EasyApplyLinkedin:
         login_pass.send_keys(Keys.RETURN)
 
     def job_search(self):
-        # Function to go to the job page on LinkedIn anf filter Jobs by specified Keywords and Location
+        # Function to go to the job page on LinkedIn and filter Jobs by specified Keywords and Location
 
         # Go to Jobs
         jobs_link = self.driver.find_element(By.LINK_TEXT, 'Jobs')
