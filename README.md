@@ -1,11 +1,8 @@
-# JobApplicationAutomationLinkedIn
-Python App to Automate Job Applications on LinkedIn
-ONLY Works with 'Easy Apply' Job Ads on LinkedIn 
+# JobApplicationAutomationLinkedIn Updated Version
 
-Requirements:
+Added Functions to the program
 
-Selenium 
+Improved in line Comments 
 
-Chrome Browser
+Added A Class with a json config file for storing User Account Email & Password as well as Keywords for Job Searching and Location.
 
-Copy Hyperlink for specified Job&Location on LinkedIn and then add it to driver.get() 
