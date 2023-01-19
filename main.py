@@ -15,7 +15,8 @@ import json
 class EasyApplyLinkedin:
 
     def __init__(self, data):
-        """Parameter initialization"""
+        # Parameter initialization of Program includes User Email, Password, Keywords, Location and Service for
+        # Chrome WebDriver from json file
 
         self.email = data['email']
         self.password = data['password']
@@ -24,12 +25,12 @@ class EasyApplyLinkedin:
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
     def login_linkedin(self):
-        """This function logs into your personal LinkedIn profile"""
+        # Function To automatically log in LinkedIn
 
-        # go to the LinkedIn login url
+        # Go to the LinkedIn login url
         self.driver.get("https://www.linkedin.com/login")
 
-        # introduce email and password and hit enter
+        # Automatically input email and password and hit enter
         login_email = self.driver.find_element(By.NAME, 'session_key')
         login_email.clear()
         login_email.send_keys(self.email)
@@ -39,14 +40,14 @@ class EasyApplyLinkedin:
         login_pass.send_keys(Keys.RETURN)
 
     def job_search(self):
-        """This function goes to the 'Jobs' section a looks for all the jobs that matches the keywords and location"""
+        # Function to go to the job page on LinkedIn anf filter Jobs by specified Keywords and Location
 
-        # go to Jobs
+        # Go to Jobs
         jobs_link = self.driver.find_element(By.LINK_TEXT, 'Jobs')
         jobs_link.click()
         time.sleep(2)
 
-        # search based on keywords and location and hit enter
+        # Search based on keywords and location and hit enter
         search_keyword = self.driver.find_element(By.XPATH,
                                                   "//input[starts-with(@id,'jobs-search-box-keyword')]")
         search_keyword.clear()
@@ -60,36 +61,39 @@ class EasyApplyLinkedin:
         search_location.send_keys(Keys.RETURN)
 
     def filter(self):
-        """This function filters all the job results by 'Easy Apply'"""
+        # Filter all Jobs by the Easy Apply button
 
-        # select all filters, click on Easy Apply and apply the filter
-        all_filters_button = self.driver.find_element(By.XPATH, "//button[@class='artdeco-pill artdeco-pill--slate "
-                                                                "artdeco-pill--choice")
+        # Select all filters, click on Easy Apply and apply the filter
+        all_filters_button = self.driver.find_element(By.XPATH, "//button[normalize-space()='All filters']")
         all_filters_button.click()
         time.sleep(1)
-        easy_apply_button = self.driver.find_element(By.XPATH, "//button[@data-control-name='filter_detail_select")
+        iframe = self.driver.find_element(By.XPATH, "//div[@id='ember1428']")
+        ActionChains(self.driver) \
+            .scroll_to_element(iframe) \
+            .perform()
+        easy_apply_button = self.driver.find_element(By.XPATH, "//div[@id='ember1082']")
         easy_apply_button.click()
         time.sleep(1)
-        apply_filter_button = self.driver.find_element(By.XPATH, "//button[@data-test-reusables-filters-modal-show"
-                                                                 "-results-button='true']")
+        apply_filter_button = self.driver.find_element(By.XPATH, "//button[@id='ember1096']")
         apply_filter_button.click()
 
     def find_offers(self):
-        """This function finds all the offers through all the pages result of the search and filter"""
+        # Function finds all the offers through all the pages result of the search and filter
 
-        # find the total amount of results (if the results are above 24-more than one page-, we will scroll trhough all available pages)
+        # find the total amount of results (if the results are above 24-more than one page-, we will scroll trhough
+        # all available pages)
         total_results = self.driver.find_element(By.CLASS_NAME, "display-flex.t-12.t-black--light.t-normal")
         total_results_int = int(total_results.text.split(' ', 1)[0].replace(",", ""))
         print(total_results_int)
 
         time.sleep(2)
-        # get results for the first page
+        # Get results for the first page
         current_page = self.driver.current_url
         results = self.driver.find_elements(By.CLASS_NAME,
                                             "occludable-update.artdeco-list__item--offset-4.artdeco-list__item.p0"
                                             ".ember-view")
 
-        # for each job add, submits application if no questions asked
+        # For each job add, submits application if no complex questions are asked
         for result in results:
             hover = ActionChains(self.driver).move_to_element(result)
             hover.perform()
@@ -98,13 +102,13 @@ class EasyApplyLinkedin:
             for title in titles:
                 self.submit_apply(title)
 
-        # if there is more than one page, find the pages and apply to the results of each page
+        # If there is more than one page, find the pages and apply to the results of each page
         if total_results_int > 24:
             time.sleep(2)
 
-            # find the last page and construct url of each page based on the total amount of pages
-            find_pages = self.driver.find_elements(By.CLASS_NAME,
-                                                   "artdeco-pagination__indicator.artdeco-pagination__indicator--number")
+            # Find the last page and construct url of each page based on the total amount of pages
+            find_pages = self.driver.find_elements(By.CLASS_NAME, 'artdeco-pagination__indicator.artdeco'
+                                                                  '-pagination__indicator--number')
             total_pages = find_pages[len(find_pages) - 1].text
             total_pages_int = int(re.sub(r"[^\d.]", "", total_pages))
             get_last_page = self.driver.find_element(By.XPATH,
@@ -114,7 +118,7 @@ class EasyApplyLinkedin:
             last_page = self.driver.current_url
             total_jobs = int(last_page.split('start=', 1)[1])
 
-            # go through all available pages and job offers and apply
+            # Go through all available pages and job offers and apply
             for page_number in range(25, total_jobs + 25, 25):
                 self.driver.get(current_page + '&start=' + str(page_number))
                 time.sleep(2)
@@ -133,13 +137,13 @@ class EasyApplyLinkedin:
             self.close_session()
 
     def submit_apply(self, job_add):
-        """This function submits the application for the job add found"""
+        # Function submits the application
 
         print('You are applying to the position of: ', job_add.text)
         job_add.click()
         time.sleep(2)
 
-        # click on the easy apply button, skip if already applied to the position
+        # Click on the easy apply button, skip if already applied for the add
         try:
             in_apply = self.driver.find_element(By.XPATH, "//button[@data-control-name='jobdetails_topcard_inapply']")
             in_apply.click()
@@ -148,7 +152,7 @@ class EasyApplyLinkedin:
             pass
         time.sleep(1)
 
-        # try to submit if submit application is available...
+        # Try to submit if submit application is available...
         try:
             submit = self.driver.find_element(By.XPATH, "//button[@data-control-name='submit_unify']")
             submit.send_keys(Keys.RETURN)
@@ -169,13 +173,13 @@ class EasyApplyLinkedin:
         time.sleep(1)
 
     def close_session(self):
-        """This function closes the actual session"""
+        # Function to close current session
 
         print('End of the session, see you later!')
         self.driver.close()
 
     def apply(self):
-        """Apply to job offers"""
+        # Apply to Jobs
 
         self.driver.maximize_window()
         self.login_linkedin()
