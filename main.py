@@ -23,12 +23,12 @@ class EasyApplyLinkedIn:
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
     def login_to_linkedin(self):
-        # Function To automatically log in LinkedIn
+        # Function - To automatically log in LinkedIn
 
         # Go to the LinkedIn login url
         self.driver.get("https://www.linkedin.com/login")
 
-        # Automatically input email and password and hit enter
+        # Automatically input email and password then hit enter
         login_email = self.driver.find_element(By.NAME, 'session_key')
         login_email.clear()
         login_email.send_keys(self.email)
@@ -40,12 +40,12 @@ class EasyApplyLinkedIn:
     def search_for_jobs(self):
         # Function to go to the job page on LinkedIn and filter Jobs by specified Keywords and Location
 
-        # Go to Jobs
+        # Go to LinkedIn Jobs Page
         jobs_link = self.driver.find_element(By.LINK_TEXT, 'Jobs')
         jobs_link.click()
         time.sleep(2)
 
-        # Search based on keywords and location and hit enter
+        # Search based on keywords and location then hit enter
         search_keyword = self.driver.find_element(By.XPATH,
                                                   "//input[starts-with(@id,'jobs-search-box-keyword')]")
         search_keyword.clear()
@@ -65,9 +65,9 @@ class EasyApplyLinkedIn:
         all_filters_button = self.driver.find_element(By.XPATH, "//button[normalize-space()='All filters']")
         all_filters_button.click()
         time.sleep(1)
-        iframe = self.driver.find_element(By.XPATH, "//div[@id='ember1428']")
+        scroll = self.driver.find_element(By.XPATH, "//div[@id='ember1428']")  # Attempt to scroll to element
         ActionChains(self.driver) \
-            .scroll_to_element(iframe) \
+            .scroll_to_element(scroll) \
             .perform()
         easy_apply_button = self.driver.find_element(By.XPATH, "//div[@id='ember1082']")
         easy_apply_button.click()
@@ -76,9 +76,9 @@ class EasyApplyLinkedIn:
         apply_filter_button.click()
 
     def find_offers(self):
-        # Function finds all the offers through all the pages result of the search and filter
+        # Function - finds all the offers through all the pages result of the search and filter
 
-        # find the total amount of results (if the results are above 24-more than one page-, scroll through
+        # Find the total amount of results (if the results are above 24-more than one page-, scroll through
         # all available pages)
         total_results = self.driver.find_element(By.CLASS_NAME, "display-flex.t-12.t-black--light.t-normal")
         total_results_int = int(total_results.text.split(' ', 1)[0].replace(",", ""))
